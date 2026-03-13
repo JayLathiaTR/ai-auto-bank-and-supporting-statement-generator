@@ -8,7 +8,7 @@ user-invocable: true
 # Documentation Fast Push Workflow
 
 ## Outcome
-Produce a safe documentation-only change, validate that no non-doc files are included, and push to the repository default branch immediately.
+Produce a safe documentation-only change, validate that no non-doc files are included, and push to `master` immediately.
 
 ## When to Use
 - Update markdown documentation quickly.
@@ -19,16 +19,16 @@ Produce a safe documentation-only change, validate that no non-doc files are inc
 ## Inputs
 - Target documentation path(s)
 - Requested content changes
-- Repository default branch name (auto-detect if not provided)
+- Target branch: `master`
 
-## Procedure
+## Quick Checklist
 1. Inspect repository state.
-2. Identify whether requested paths are documentation files.
+2. Confirm all requested paths match documentation rules.
 3. Apply minimal documentation edits only.
-4. Verify no non-documentation files are staged.
-5. Run lightweight checks to avoid regressions caused by accidental edits.
-6. Commit documentation files with a clear message.
-7. Push directly to the default branch.
+4. Stage only documentation files.
+5. Verify no non-documentation files are staged.
+6. Commit with a clear docs-focused message.
+7. Push directly to `master`.
 8. Report changed files and commit hash.
 
 ## Decision Points
@@ -36,8 +36,6 @@ Produce a safe documentation-only change, validate that no non-doc files are inc
   Treat it as out of scope and do not include it in the commit.
 - If unrelated non-doc files are changed in the working tree:
   Leave them untouched and stage only documentation files.
-- If default branch cannot be detected:
-  Fall back to `main`, then `master`, and report what was used.
 - If push fails:
   report the error and provide the exact retry command.
 
@@ -59,5 +57,5 @@ Produce a safe documentation-only change, validate that no non-doc files are inc
 ## Completion Checklist
 - Requested documentation content is updated.
 - Only documentation files are in the commit.
-- Changes are pushed to the default branch.
+- Changes are pushed to `master`.
 - Final response summarizes files changed and push result.
