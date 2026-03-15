@@ -217,6 +217,12 @@ Completed in Increment 13 (User-Verified):
 - Kept developer/debug configuration available via explicit toggle while preserving current architecture support.
 - Verified simplified default top section and toggle behavior.
 
+Completed in Increment 14 (User-Verified):
+- Added a one-click `Quick Generate` UI action for faster debug/test execution.
+- Added `Quick Mode` selection (`quick_plan`, `interleaved_plan`) for rapid template routing.
+- Reused existing plan-apply and PDF-generation paths to keep output behavior consistent.
+- Verified end-to-end generation without manual step-by-step button sequence.
+
 Deliverables:
 - Map plan blocks to rendered pages.
 - Merge ordered pages into final PDFs per configured document.
@@ -253,8 +259,8 @@ Pending:
 ## 8. Immediate Next Implementation Steps
 1. Keep per-document PDF outputs and manifests synchronized for QA validation.
 2. Add export-friendly summary views for inconsistency triage in QA runs.
-3. Add a one-click layman flow that runs quick plan apply + validate + PDF generation.
-4. Continue refining separation between debug/developer controls and future end-user UI mode.
+3. Continue refining separation between debug/developer controls and future end-user UI mode.
+4. Move remaining developer-only actions out of the default primary flow.
 
 ## 9. Project Direction Lock
 This document supersedes earlier interpretations that focused on JSON-only generation as the end product.
