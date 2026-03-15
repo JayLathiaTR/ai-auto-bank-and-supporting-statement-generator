@@ -79,3 +79,9 @@ Apply this collaboration loop for ongoing project work:
 4. If any issue or regression is found by either the user or the agent, stop forward work and fix it first.
 5. Resume next increment only after the fix is validated.
 6. Repeat this loop until project completion.
+
+## Wide-Fix Propagation Rule
+- When applying a fix or implementing a suggested improvement in one area, proactively scan for equivalent patterns in related features, sections, or document types.
+- If matching patterns are found, apply the same fix in those locations within the same change batch, unless explicitly excluded by the user.
+- In the final response, clearly state where the wider fix was applied and why those areas required the same correction.
+- If some related areas are intentionally not changed, explain the reason and residual risk.
