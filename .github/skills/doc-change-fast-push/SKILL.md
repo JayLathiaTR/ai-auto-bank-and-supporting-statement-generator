@@ -51,7 +51,9 @@ Produce a safe documentation-only change, validate that no non-doc files are inc
 
 ## Security and Dependency Guardrails
 - Do not add dependencies for documentation-only work unless explicitly required.
-- If package installation is required for related workflow tooling, use non-vulnerable Thomson Reuters trusted libraries/packages.
+- If package installation is required, always use organization TR1 JFrog repositories as the package source (for example, tr1.jfrog.io endpoints) for local and CI/CD flows.
+- Do not use public registries as the primary source when TR1 JFrog is available; only use alternatives if the user explicitly approves an exception.
+- Use environment-injected credentials/tokens for package access (for example, `JFROG_NPM_TOKEN`) and never hardcode secrets in files or commands.
 - Keep changes minimal and scoped to the user request.
 
 ## Completion Checklist

@@ -1,238 +1,152 @@
-# MVP Specification: Deterministic Synthetic Audit Document Generator
+# MVP Specification (Re-Baselined): UI-Configured Real Document PDF Generator
 
 ## 1. Objective
-Deliver a deterministic Python-based generator that creates synthetic, audit-relevant document packages for QA and development testing.
+Deliver a Windows desktop executable that lets QA users configure document package rules in UI and generate real PDF files (invoice, shipping docs, bank statement, and related evidence) with deterministic linkage and reproducibility.
 
-The MVP must support:
-- Prompt-driven scenario requests.
-- Cross-document linkage across core financial evidence artifacts.
-- Ground-truth outputs that allow direct validation against auditor Excel templates.
+This is the main product target.
 
-## 2. In-Scope Document Types (MVP)
-1. Invoice
-2. Purchase Order (PO)
-3. Bill of Lading (BOL)
-4. Shipping Document
-5. Receipt
-6. Credit Memo
-7. Bank Statement Entry (line-item level)
+## 2. Why This Re-Baseline
+The current implementation is a useful engine foundation, but it is not yet the final QA-facing outcome.
 
-Out of scope for MVP (phase 2+):
-- OCR simulation noise injection.
-- Full trial-balance statement rendering.
-- LLM-generated narrative text.
+Current state:
+- Generates deterministic synthetic structured data and manifests.
+- Produces JSON artifacts for linkage validation.
+- Provides desktop execution flow.
 
-## 3. Required Field Dictionary
-All generated records must include values required for extraction and linkage tests.
+Target state:
+- Generate real, human-readable PDF documents according to user-defined page composition and linkage constraints.
 
-### 3.1 Common Fields
-- document_type
-- document_id
-- issue_date
-- currency
-- amount_total
-- party_seller_name
-- party_buyer_name
+## 3. End-User Product Requirement (Authoritative)
+The user of this app must be able to configure in UI:
+- Total document count.
+- Per-document page count.
+- Per-page or page-range content type (invoice, shipping, bank, etc).
+- Interleaving rules (for example, page 1 and 3 of invoice A, page 2 of invoice B).
+- Linkage constraints across pages and docs (for example, PO 111 must appear in invoice and shipping docs).
 
-### 3.2 Invoice Fields
-- invoice_id
-- po_id (nullable for negative scenarios)
-- invoice_date
-- due_date
-- line_items[]: description, quantity, unit_price, line_total
-- subtotal
-- tax_amount
-- total_amount
+When user clicks Generate Documents, the app must output real PDFs that follow the configured plan.
 
-### 3.3 PO Fields
-- po_id
-- po_date
-- vendor_name
-- buyer_name
-- line_items[]
-- po_total
+## 4. Scope for Final MVP
+### 4.1 In-Scope Output
+- Real PDF files for at least:
+  - Invoice
+  - Shipping document family (PO, BOL, shipping)
+  - Bank statement pages
+  - Receipt and credit memo as needed by scenario
+- One package manifest containing:
+  - Canonical field values
+  - Linkage graph
+  - Page-to-entity mapping
+  - Excel-comparison expected values
 
-### 3.4 BOL Fields
-- bol_id
-- po_id
-- shipment_date
-- carrier_name
-- origin
-- destination
-- shipped_items[]
+### 4.2 In-Scope UI
+- Document plan builder (document count, page plan, linkage rules).
+- Basic template/style choices.
+- Deterministic repeatability number (seed).
+- Generate button for full package creation.
 
-### 3.5 Shipping Document Fields
-- shipment_id
-- bol_id
-- po_id
-- ship_date
-- delivery_date
-- carrier_name
-- status
+### 4.3 Out of Scope for This MVP
+- OCR noise simulation.
+- Pixel-perfect replicas of every external source format.
+- LLM-driven narrative content generation.
 
-### 3.6 Receipt Fields
-- receipt_id
-- invoice_id
-- payment_date
-- payment_method
-- paid_amount
-- bank_reference
+## 5. Functional Requirements
+1. Deterministic generation:
+- Same plan plus same seed must reproduce same outputs.
 
-### 3.7 Credit Memo Fields
-- credit_memo_id
-- invoice_id
-- credit_date
-- credit_reason
-- credit_amount
+2. Page-level composition:
+- User can map pages to logical entities (invoice A/B, shipping doc, bank pages, etc).
 
-### 3.8 Bank Statement Entry Fields
-- bank_entry_id
-- posting_date
-- value_date
-- counterparty_name
-- reference_text
-- debit_credit_flag
-- amount
-- running_balance
-- linked_receipt_id (nullable)
+3. Interleaving support:
+- Non-contiguous pages for same entity are supported.
 
-## 4. Linkage Model and Constraints
-The generator must enforce a relationship graph for positive scenarios and controlled breaks for negative scenarios.
+4. Cross-document linkage:
+- IDs and field values remain consistent where configured.
+- Controlled mismatches can be injected where configured.
 
-### 4.1 Primary Link Graph
-- PO.po_id -> Invoice.po_id
-- PO.po_id -> BOL.po_id
-- BOL.bol_id -> ShippingDocument.bol_id
-- Invoice.invoice_id -> Receipt.invoice_id
-- Receipt.receipt_id -> BankEntry.linked_receipt_id or embedded in reference_text
-- CreditMemo.invoice_id -> Invoice.invoice_id
+5. Real PDF rendering:
+- Output is PDF files (not JSON-only artifacts).
 
-### 4.2 Consistency Rules (Positive Cases)
-- Seller and buyer party names stay consistent across linked documents.
-- Date ordering is valid: po_date <= shipment_date <= invoice_date <= payment_date <= posting_date.
-- Amount continuity is valid within tolerance:
-  - Receipt.paid_amount equals Invoice.total_amount minus CreditMemo.credit_amount (if present).
-  - Bank entry amount equals Receipt.paid_amount.
+6. Validation assets:
+- Ground-truth manifest remains available for automated QA checks.
 
-### 4.3 Controlled Inconsistency Rules (Negative Cases)
-- One linkage key mismatch per scenario where configured.
-- Partial references allowed (for example, truncated invoice ID in bank reference text).
-- Date anomalies allowed in specific scenario classes.
-- Amount differences allowed using bounded deltas.
+## 6. Re-Baselined Delivery Plan and Status
+### Phase 0: Foundation Engine (Completed)
+Status: Completed
 
-## 5. Multi-Page Rendering Rules
-MVP supports one required multi-page behavior for invoices.
+Completed items:
+- Deterministic seed management.
+- Request/schema validation.
+- Scenario builders (happy path and negative variants).
+- Linkage validator and quality checks.
+- Variation planner and diversity checks.
+- Package exporter and run reports.
+- Desktop executable scaffolding and build pipeline.
 
-### 5.1 Invoice Continuation
-- Page 1 contains invoice header and first N line items.
-- Page 2 continues line items and totals.
-- Invoice number may be omitted on page 2 when scenario requests continuation behavior.
-- Continuation pages must preserve visual and data consistency.
+Note:
+- This phase outputs structured data and manifests, not final PDF business documents.
 
-## 6. Scenario Catalog (MVP)
-Each scenario emits a package and a ground-truth manifest.
+### Phase 1: Document Plan Schema + UI Plan Builder (Pending)
+Status: Pending
 
-1. Happy path linked set: all relationships valid.
-2. Partial match: one weak/partial key linkage (for example short reference text).
-3. Key mismatch: exactly one document key mismatch.
-4. Amount mismatch: receipt or bank amount differs within configured delta.
-5. Date anomaly: one temporal ordering violation.
-6. Multi-page invoice continuation: 2-page invoice with continuation semantics.
+Deliverables:
+- New plan schema for page-level composition.
+- UI controls for:
+  - total documents,
+  - per-document page definitions,
+  - interleaving and linkage constraints.
 
-## 7. Prompt and Request Schema (Generator Input)
-Minimal request schema for MVP:
+### Phase 2: PDF Rendering Layer (Pending)
+Status: Pending
 
-```json
-{
-  "seed": 20260313,
-  "scenario_type": "happy_path|partial_match|key_mismatch|amount_mismatch|date_anomaly|multi_page_invoice",
-  "document_count": {
-    "invoice": 1,
-    "po": 1,
-    "bol": 1,
-    "shipping_document": 1,
-    "receipt": 1,
-    "credit_memo": 0,
-    "bank_entry": 1
-  },
-  "multi_page": {
-    "enabled": false,
-    "target_document": "invoice",
-    "page_count": 2,
-    "omit_invoice_id_on_continuation": true
-  },
-  "options": {
-    "currency": "USD",
-    "max_amount_delta_pct": 5,
-    "allow_partial_reference": true
-  }
-}
-```
+Deliverables:
+- Renderers for invoice, shipping docs, bank statements, receipt, credit memo.
+- Multi-page and continuation rules.
+- Template packs for business-like visual outputs.
 
-## 8. Output Package Format
-Each run must output a deterministic package folder:
+### Phase 3: Composition Orchestrator (Pending)
+Status: Pending
 
-- artifacts/
-  - rendered files per document (PDF or JSON template render output in MVP)
-- manifest/
-  - ground_truth.json
-  - linkage_graph.json
-  - scenario_metadata.json
+Deliverables:
+- Map plan blocks to rendered pages.
+- Merge ordered pages into final PDFs per configured document.
+- Guarantee page-level linkage consistency.
 
-### 8.1 ground_truth.json Minimum Content
-- Canonical extracted fields per document.
-- Expected Excel mapping values:
-  - document_id
-  - customer_or_vendor_name
-  - invoice_amount
-  - invoice_date
-- Match expectations per relationship edge.
+### Phase 4: Final QA-Ready EXE Workflow (Pending)
+Status: Pending
 
-### 8.2 linkage_graph.json Minimum Content
-- Node list with document IDs and types.
-- Edge list with relation types and expected status:
-  - match
-  - partial
-  - mismatch
-  - ambiguous
+Deliverables:
+- End-to-end Generate Documents flow in UI.
+- Real PDF outputs + manifest bundle.
+- Friendly user messaging for failures and corrective action.
 
-## 9. Determinism and Reproducibility
-- Same input request plus same seed must produce identical structured outputs.
-- Random value generation must use a seeded RNG only.
-- Generated IDs should be stable for a given seed and scenario index.
-- Timestamps and sequence numbers must be deterministic.
+### Phase 5: CI/CD and Release Hardening (Partially Completed)
+Status: In Progress
 
-## 10. Acceptance Criteria for MVP
-1. Generator creates all in-scope document types.
-2. Generator supports all six MVP scenario categories.
-3. Linked IDs and field consistency pass positive-case validation.
-4. Controlled inconsistencies are injected correctly in negative-case scenarios.
-5. Multi-page invoice continuation behavior is generated and represented in manifests.
-6. Re-running with same seed reproduces equivalent outputs.
-7. Ground-truth files are sufficient for automated matching assertions.
+Completed:
+- Build script and packaging baseline.
+- JFrog-oriented dependency path integration.
 
-## 11. Non-Functional Constraints
-- Python implementation with deterministic behavior first.
-- No requirement for external LLM service in MVP.
-- Keep package and dependency footprint minimal.
+Pending:
+- Final CI workflow for full product behavior.
+- Release runbook for QA users.
 
-## 12. Implementation Order (Recommended)
-1. Define internal data models for each document type.
-2. Implement deterministic ID/date/amount generators.
-3. Implement variation planner (layout, labels, date formats, ID display patterns).
-4. Implement linkage engine and constraint validator.
-5. Implement scenario injectors by category.
-6. Implement renderers and manifest writers.
-7. Add regression tests for seed reproducibility, diversity thresholds, and linkage expectations.
+## 7. Acceptance Criteria for Final MVP
+1. User can configure a multi-document, multi-page plan in UI.
+2. User can define interleaving and linkage constraints in that plan.
+3. Clicking Generate Documents creates real PDFs matching the plan.
+4. Linkage and configured mismatches appear exactly as configured.
+5. Ground-truth manifest is generated for automation.
+6. Same seed and plan reproduces the same package.
+7. Packaged executable runs this flow without technical setup.
 
-## 13. Non-Repetitive Output Strategy (MVP)
-To prevent repetitive invoice and supporting evidence templates, the generator must separate:
-- Canonical truth values (IDs, dates, amounts, parties, linkage keys).
-- Presentation variation values (layout family, labels, date format display, reference text style).
+## 8. Immediate Next Implementation Steps
+1. Introduce a new Document Plan model (page blocks and linkage constraints).
+2. Build first PDF renderer vertical slice (invoice + shipping + bank statement basic templates).
+3. Connect UI to collect and validate the plan.
+4. Generate one end-to-end PDF package from UI configuration.
 
-MVP requires deterministic variation selection using the request seed so that:
-- Same seed produces identical variation choices.
-- Different seeds produce meaningfully different document presentations.
+## 9. Project Direction Lock
+This document supersedes earlier interpretations that focused on JSON-only generation as the end product.
 
-Variation policy details and matrix are defined in:
-- docs/variation-strategy.md
+JSON generation remains a core internal validation layer, but the deliverable product for QA is the PDF-generating executable described above.
