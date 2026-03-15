@@ -115,8 +115,14 @@ Sequencing note:
 - Phase 1B is intentionally deferred until after a usable Phase 2 PDF rendering slice exists.
 - This allows end-to-end value delivery earlier (real PDF generation), then UX hardening on top.
 
-### Phase 2: PDF Rendering Layer (Pending)
-Status: Pending
+### Phase 2: PDF Rendering Layer (In Progress)
+Status: In Progress
+
+Completed in Increment 1 (User-Verified):
+- Added a working plan-to-PDF rendering vertical slice that generates real PDF files.
+- Added CLI render mode: `--render-plan-pdf` with `--plan-json`, `--plan-example`, and `--plan-stdin` input options.
+- Added UI action: `Generate PDFs From Plan` using the validated plan editor payload.
+- Verified generated PDFs open correctly and include expected page-level block content.
 
 Deliverables:
 - Renderers for invoice, shipping docs, bank statements, receipt, credit memo.
@@ -160,11 +166,11 @@ Pending:
 7. Packaged executable runs this flow without technical setup.
 
 ## 8. Immediate Next Implementation Steps
-1. Build first PDF renderer vertical slice (invoice + shipping + bank statement basic templates).
+1. Expand Phase 2 renderer coverage to receipt and credit memo template pages.
 2. Add page-composition orchestrator for user-defined page ranges and interleaving.
-3. Bind validated Document Plan UI input to the PDF rendering pipeline.
-4. Generate one end-to-end PDF package from UI configuration.
-5. Return to Phase 1B form-based plan builder UX after Phase 2 slice is user-verified.
+3. Add optional merged package PDF output per configured document plan.
+4. Keep per-document PDF outputs and manifests synchronized for QA validation.
+5. Return to Phase 1B form-based plan builder UX after Phase 2 and Phase 3 slices are user-verified.
 
 ## 9. Project Direction Lock
 This document supersedes earlier interpretations that focused on JSON-only generation as the end product.
