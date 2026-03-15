@@ -1,11 +1,11 @@
 ---
 name: doc-change-fast-push
-description: "Create, update, or delete documentation files and push them immediately to the default branch while preventing regressions and avoiding non-documentation commits. Use for docs-only hotfixes, policy updates, and workflow notes. Also enforce step-by-step development flow, explicit user testing guidance, and regression-first fixing before moving forward."
-argument-hint: "What documentation change should be made and pushed?"
+description: "Govern project-phase workflow and documentation updates with immediate push discipline for docs changes. Use for docs-only hotfixes, policy updates, workflow governance, and phase-closure documentation after user verification. Also enforce step-by-step development flow, explicit user testing guidance, and regression-first fixing before moving forward."
+argument-hint: "What phase/process change should be documented and pushed?"
 user-invocable: true
 ---
 
-# Documentation Fast Push Workflow
+# Phase Workflow and Documentation Governance
 
 ## Outcome
 Produce a safe documentation-only change, validate that no non-doc files are included, and push to `master` immediately.
@@ -61,6 +61,11 @@ Produce a safe documentation-only change, validate that no non-doc files are inc
 - Only documentation files are in the commit.
 - Changes are pushed to `master`.
 - Final response summarizes files changed and push result.
+
+## Verified-Phase Documentation Rule
+- When a process step or phase is completed and user-verified, update related documentation in parallel before continuing to the next phase.
+- Push the documentation update promptly after verification as a docs-focused commit.
+- Do not defer verified-phase documentation updates to the end of the project.
 
 ## Step-By-Step Development Protocol
 Apply this collaboration loop for ongoing project work:
