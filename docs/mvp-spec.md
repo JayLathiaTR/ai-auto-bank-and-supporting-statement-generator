@@ -130,6 +130,11 @@ Completed in Increment 2 (User-Verified):
 - Added UI control to enable merged package output from the plan generation flow.
 - Verified merged package output path and generated merged PDF via UI run.
 
+Completed in Increment 3 (User-Verified):
+- Expanded content-specific template sections for `receipt` and `credit_memo` pages.
+- Added explicit receipt and credit memo line rendering in generated PDF output.
+- Verified receipt and credit memo template lines appear correctly in generated PDFs.
+
 Deliverables:
 - Renderers for invoice, shipping docs, bank statements, receipt, credit memo.
 - Multi-page and continuation rules.
@@ -176,10 +181,10 @@ Pending:
 7. Packaged executable runs this flow without technical setup.
 
 ## 8. Immediate Next Implementation Steps
-1. Expand Phase 2 renderer coverage to receipt and credit memo template pages.
-2. Add page-composition orchestrator for user-defined page ranges and interleaving.
-3. Keep per-document PDF outputs and manifests synchronized for QA validation.
-4. Add stronger page-level linkage consistency checks across merged outputs.
+1. Add page-composition orchestrator for user-defined page ranges and interleaving.
+2. Keep per-document PDF outputs and manifests synchronized for QA validation.
+3. Add stronger page-level linkage consistency checks across merged outputs.
+4. Add linkage summary metadata for merged package outputs.
 5. Return to Phase 1B form-based plan builder UX after Phase 2 and Phase 3 slices are user-verified.
 
 ## 9. Project Direction Lock
