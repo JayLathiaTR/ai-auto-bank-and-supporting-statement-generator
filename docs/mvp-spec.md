@@ -159,6 +159,12 @@ Completed in Increment 3 (User-Verified):
 - Added UI linkage mode control and included selected mode in completion feedback.
 - Verified linkage profile behavior and runtime output for selected modes.
 
+Completed in Increment 4 (User-Verified):
+- Added advanced merged page composition modes: `document_order`, `content_type_round_robin`, and `entity_round_robin`.
+- Added CLI composition selection via `--composition-mode`.
+- Added UI composition mode control and completion feedback for selected strategy.
+- Verified runtime output and merged generation behavior for selected composition mode.
+
 Deliverables:
 - Map plan blocks to rendered pages.
 - Merge ordered pages into final PDFs per configured document.
@@ -193,10 +199,10 @@ Pending:
 7. Packaged executable runs this flow without technical setup.
 
 ## 8. Immediate Next Implementation Steps
-1. Extend composition rules for advanced interleaving patterns across multiple entities.
-2. Keep per-document PDF outputs and manifests synchronized for QA validation.
-3. Add UI indicators for consistency failures with direct guidance per offending link key.
-4. Add actionable linkage issue summaries (grouped by link key/entity) in output manifest.
+1. Keep per-document PDF outputs and manifests synchronized for QA validation.
+2. Add UI indicators for consistency failures with direct guidance per offending link key.
+3. Add actionable linkage issue summaries (grouped by link key/entity) in output manifest.
+4. Add export-friendly summary views for inconsistency triage in QA runs.
 5. Return to Phase 1B form-based plan builder UX after Phase 2 and Phase 3 slices are user-verified.
 
 ## 9. Project Direction Lock
