@@ -124,13 +124,23 @@ Completed in Increment 1 (User-Verified):
 - Added UI action: `Generate PDFs From Plan` using the validated plan editor payload.
 - Verified generated PDFs open correctly and include expected page-level block content.
 
+Completed in Increment 2 (User-Verified):
+- Added optional merged package PDF output in plan order (`package-merged.pdf`).
+- Added CLI merge option: `--merge-plan-pdf` for combined package output.
+- Added UI control to enable merged package output from the plan generation flow.
+- Verified merged package output path and generated merged PDF via UI run.
+
 Deliverables:
 - Renderers for invoice, shipping docs, bank statements, receipt, credit memo.
 - Multi-page and continuation rules.
 - Template packs for business-like visual outputs.
 
-### Phase 3: Composition Orchestrator (Pending)
-Status: Pending
+### Phase 3: Composition Orchestrator (In Progress)
+Status: In Progress
+
+Completed in Increment 1 (User-Verified):
+- Added first composition orchestration slice that combines plan-ordered pages into one merged package PDF.
+- Kept per-document PDF outputs alongside merged package output for QA workflows.
 
 Deliverables:
 - Map plan blocks to rendered pages.
@@ -168,8 +178,8 @@ Pending:
 ## 8. Immediate Next Implementation Steps
 1. Expand Phase 2 renderer coverage to receipt and credit memo template pages.
 2. Add page-composition orchestrator for user-defined page ranges and interleaving.
-3. Add optional merged package PDF output per configured document plan.
-4. Keep per-document PDF outputs and manifests synchronized for QA validation.
+3. Keep per-document PDF outputs and manifests synchronized for QA validation.
+4. Add stronger page-level linkage consistency checks across merged outputs.
 5. Return to Phase 1B form-based plan builder UX after Phase 2 and Phase 3 slices are user-verified.
 
 ## 9. Project Direction Lock
