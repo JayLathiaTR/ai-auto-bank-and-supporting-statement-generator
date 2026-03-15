@@ -86,8 +86,14 @@ Completed items:
 Note:
 - This phase outputs structured data and manifests, not final PDF business documents.
 
-### Phase 1: Document Plan Schema + UI Plan Builder (Pending)
-Status: Pending
+### Phase 1: Document Plan Schema + UI Plan Builder (In Progress)
+Status: In Progress
+
+Completed in Increment 1 (User-Verified):
+- Added `GenerationPlan` schema for page-level composition with coverage and overlap validation.
+- Added CLI plan validation modes: `--plan-json`, `--plan-example`, `--plan-stdin`.
+- Added interleaved plan example at `examples/document-plan-interleaved.json`.
+- Added stdin safety guard so `--plan-stdin` and `--request-stdin` fail fast with guidance when no input is piped.
 
 Deliverables:
 - New plan schema for page-level composition.
@@ -141,9 +147,9 @@ Pending:
 7. Packaged executable runs this flow without technical setup.
 
 ## 8. Immediate Next Implementation Steps
-1. Introduce a new Document Plan model (page blocks and linkage constraints).
+1. Connect UI to collect and validate the new document plan.
 2. Build first PDF renderer vertical slice (invoice + shipping + bank statement basic templates).
-3. Connect UI to collect and validate the plan.
+3. Add page-composition orchestrator for user-defined page ranges and interleaving.
 4. Generate one end-to-end PDF package from UI configuration.
 
 ## 9. Project Direction Lock
