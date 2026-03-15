@@ -184,6 +184,12 @@ Completed in Increment 7 (User-Verified):
 - Surfaced issue severity in UI completion feedback.
 - Verified severity payload and runtime behavior in mismatch injection mode.
 
+Completed in Increment 8 (User-Verified):
+- Added UI quick issue filters for `all_issues`, `mismatch_only`, and `consistency_conflicts_only`.
+- Added filtered guidance rendering so users can isolate mismatch injections from true consistency conflicts.
+- Included selected issue-filter mode in completion feedback for clearer QA traceability.
+- Verified filtered guidance behavior in UI flow.
+
 Deliverables:
 - Map plan blocks to rendered pages.
 - Merge ordered pages into final PDFs per configured document.
@@ -220,8 +226,8 @@ Pending:
 ## 8. Immediate Next Implementation Steps
 1. Keep per-document PDF outputs and manifests synchronized for QA validation.
 2. Add export-friendly summary views for inconsistency triage in QA runs.
-3. Add UI quick filters for mismatch-only versus true consistency conflicts.
-4. Return to Phase 1B form-based plan builder UX after Phase 2 and Phase 3 slices are user-verified.
+3. Start Phase 1B form-based plan builder UX with non-technical controls that can populate plan JSON.
+4. Expand form builder coverage to multi-document and interleaving-heavy cases after initial slice is user-verified.
 
 ## 9. Project Direction Lock
 This document supersedes earlier interpretations that focused on JSON-only generation as the end product.
